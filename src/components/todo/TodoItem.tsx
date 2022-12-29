@@ -1,5 +1,5 @@
 import React from "react";
-import { todoType } from "../../types/todoType";
+import { todoType } from "../../types/\btypes";
 
 interface IProps {
   todo: todoType;

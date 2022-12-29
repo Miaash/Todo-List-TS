@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { todos } from "../../firebase/firebaseController";
 import { DocumentData, onSnapshot, QuerySnapshot } from "firebase/firestore";
-import { todoType } from "../../types/todoType";
+import { todoType } from "../../types/\btypes";
 import TodoItem from "./TodoItem";
 
 const TodoContents = () => {
@@ -22,7 +22,7 @@ const TodoContents = () => {
 
   return (
     <div>
-      <h1> Todo List </h1>
+      <h3> Todo List </h3>
       {todoItems && todoItems.length ? (
         <div>
           {todoItems?.map((todo) => (
