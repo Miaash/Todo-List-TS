@@ -10,15 +10,29 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const { setIsLogin } = useLoginStore();
+  const [emailError, setEmailError] = useState(false);
+  const [pwdError, setPwdError] = useState(false);
   const navigate = useNavigate();
 
   const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setEmail(e.target.value);
+    const regExp =
+      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+    if (regExp.test(e.target.value)) {
+      setEmailError(true);
+    } else {
+      setEmailError(false);
+    }
   };
   const changePwdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setPwd(e.target.value);
+    if (e.target.value.length < 6) {
+      setPwdError(false);
+    } else if (e.target.value.length >= 6) {
+      setPwdError(true);
+    }
   };
 
   // 로그인 핸들러
@@ -42,21 +56,45 @@ const LoginPage = () => {
       <MainContents>
         <TitleBox>Login</TitleBox>
         <FormBox onSubmit={submitHandler}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="이메일을 작성해주세요"
-            onChange={changeEmailHandler}
-          />
-          <label htmlFor="password">PassWord</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="6자 이상 작성해주세요"
-            onChange={changePwdHandler}
-          />
-          <button>Login</button>
+          <EmailBox>
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              placeholder="이메일을 작성해주세요"
+              onChange={changeEmailHandler}
+            />
+            {emailError ? (
+              <p className="correct">올바른 형식입니다.</p>
+            ) : (
+              <p className="wrong">이메일 형식에 맞지 않습니다.</p>
+            )}
+          </EmailBox>
+          <PwdBox>
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              placeholder="6자 이상 작성해주세요"
+              onChange={changePwdHandler}
+            />
+            {pwdError ? (
+              <p className="correct">올바른 형식입니다.</p>
+            ) : (
+              <p className="wrong">6자 이상 입력해주세요.</p>
+            )}
+          </PwdBox>
+          {pwdError && emailError ? (
+            <button>SignUp</button>
+          ) : (
+            <button
+              className="disabled"
+              disabled={true}
+              style={{ cursor: "no-drop" }}
+            >
+              SignUp
+            </button>
+          )}
         </FormBox>
         <TextBox>
           <p>계정이 없으신가요?</p>
@@ -94,6 +132,7 @@ const TitleBox = styled.p`
   align-items: center;
   justify-content: center;
   font-size: 40px;
+  font-weight: 600;
 `;
 
 const FormBox = styled.form`
@@ -110,7 +149,6 @@ const FormBox = styled.form`
     height: 40px;
     font-size: 20px;
     padding: 7px;
-    margin-bottom: 20px;
   }
   button {
     height: 57px;
@@ -124,6 +162,41 @@ const FormBox = styled.form`
       background-color: #13a478;
     }
   }
+  .disabled {
+    background-color: #bcbcbc;
+    :hover {
+      cursor: pointer;
+      background-color: #bcbcbc;
+    }
+  }
+`;
+
+const EmailBox = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  .correct {
+    color: green;
+    font-size: 16px;
+  }
+  .wrong {
+    color: red;
+    font-size: 16px;
+  }
+`;
+
+const PwdBox = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  .correct {
+    color: green;
+    font-size: 16px;
+  }
+  .wrong {
+    color: red;
+    font-size: 16px;
+  }
 `;
 
 const TextBox = styled.div`
@@ -131,6 +204,7 @@ const TextBox = styled.div`
   align-items: center;
   justify-content: center;
   font-size: 18px;
+  margin-top: 10px;
   p {
     margin-right: 10px;
   }

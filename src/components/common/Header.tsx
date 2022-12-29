@@ -40,7 +40,7 @@ const MainWrapper = styled.header`
   position: sticky;
   z-index: 10000;
   width: 100%;
-  border-bottom: 1px #000 solid;
+  border-bottom: 1px #d0d0d0 solid;
 `;
 
 const HeaderContainer = styled.div`
