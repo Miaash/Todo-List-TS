@@ -10,7 +10,8 @@
 - Styled-Components
 - React-Query
 - Firebase
+- Zustand
 
-### 구현된 화면
+### 주요기능 및 구현화면
 
 
