@@ -1,22 +1,33 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { auth } from "../firebase/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router";
-import Header from "../components/common/Header";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { auth } from '../firebase/firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router';
+import Header from '../components/common/Header';
+import firebase from 'firebase/compat/app';
 
 const SignUpPage = () => {
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [email, setEmail] = useState('');
+  const [pwd, setPwd] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [pwdError, setPwdError] = useState(false);
   const navigate = useNavigate();
 
+  // 로그인된 상태로 회원가입페이지 접근 시, 메인페이지로 이동
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        navigate('/');
+      }
+    });
+  }, []);
+
   const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setEmail(e.target.value);
+    // 이메일 유효성 검사
     const regExp =
-      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     if (regExp.test(e.target.value)) {
       setEmailError(true);
     } else {
@@ -26,6 +37,7 @@ const SignUpPage = () => {
   const changePwdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setPwd(e.target.value);
+    // 패스워드 유효성 검사
     if (e.target.value.length < 6) {
       setPwdError(false);
     } else if (e.target.value.length >= 6) {
@@ -39,11 +51,16 @@ const SignUpPage = () => {
 
     createUserWithEmailAndPassword(auth, email, pwd)
       .then(() => {
-        alert("회원가입 성공!");
-        navigate("/login");
+        alert('회원가입 되었습니다.');
+        navigate('/login');
       })
       .catch((err) => {
-        alert(err);
+        if (err.code === 'auth/email-already-in-use') {
+          alert('이미 가입된 계정입니다. 로그인을 진행해주세요.');
+          navigate('/login');
+        } else {
+          alert(err);
+        }
       });
   };
 
@@ -87,7 +104,7 @@ const SignUpPage = () => {
             <button
               className="disabled"
               disabled={true}
-              style={{ cursor: "no-drop" }}
+              style={{ cursor: 'no-drop' }}
             >
               SignUp
             </button>
@@ -95,7 +112,7 @@ const SignUpPage = () => {
         </FormBox>
         <TextBox>
           <p>계정이 있으신가요?</p>
-          <span onClick={() => navigate("/login")}>로그인하기</span>
+          <span onClick={() => navigate('/login')}>로그인하기</span>
         </TextBox>
       </MainContents>
     </MainWrapper>

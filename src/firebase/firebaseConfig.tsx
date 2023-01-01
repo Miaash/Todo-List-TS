@@ -25,3 +25,6 @@ export { firestore };
 
 // auth 내보내기
 export const auth = firebase.auth();
+
+// apikey 내보내기
+export const apiKey = firebaseConfig.apiKey;

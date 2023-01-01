@@ -1,24 +1,35 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { auth } from "../firebase/firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router";
-import { useLoginStore } from "../store/store";
-import Header from "../components/common/Header";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { auth } from '../firebase/firebaseConfig';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import firebase from 'firebase/compat/app';
+import { useNavigate } from 'react-router';
+import { useLoginStore } from '../store/store';
+import Header from '../components/common/Header';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [email, setEmail] = useState('');
+  const [pwd, setPwd] = useState('');
   const { setIsLogin } = useLoginStore();
   const [emailError, setEmailError] = useState(false);
   const [pwdError, setPwdError] = useState(false);
+
   const navigate = useNavigate();
+
+  // 로그인된 상태로 로그인페이지 접근 시, 메인페이지로 이동
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        navigate('/');
+      }
+    });
+  }, []);
 
   const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setEmail(e.target.value);
     const regExp =
-      /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
+      /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i;
     if (regExp.test(e.target.value)) {
       setEmailError(true);
     } else {
@@ -38,16 +49,23 @@ const LoginPage = () => {
   // 로그인 핸들러
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    signInWithEmailAndPassword(auth, email, pwd)
-      .then(() => {
-        alert("로그인 성공!");
-        navigate("/");
-        setIsLogin(true);
-      })
-      .catch((err) => {
-        alert(err);
-      });
+    // 세션에 (uid) 저장하기
+    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then((res) => {
+      signInWithEmailAndPassword(auth, email, pwd)
+        .then(() => {
+          alert('로그인 되었습니다.');
+          navigate('/usertodo');
+          setIsLogin(true);
+        })
+        .catch((err) => {
+          if (err.code === 'auth/user-not-found') {
+            alert('계정이 없습니다. 회원가입을 진행해주세요.');
+            navigate('/signup');
+          } else {
+            alert(err);
+          }
+        });
+    });
   };
 
   return (
@@ -90,7 +108,7 @@ const LoginPage = () => {
             <button
               className="disabled"
               disabled={true}
-              style={{ cursor: "no-drop" }}
+              style={{ cursor: 'no-drop' }}
             >
               SignUp
             </button>
@@ -98,7 +116,7 @@ const LoginPage = () => {
         </FormBox>
         <TextBox>
           <p>계정이 없으신가요?</p>
-          <span onClick={() => navigate("/signup")}>가입하기</span>
+          <span onClick={() => navigate('/signup')}>가입하기</span>
         </TextBox>
       </MainContents>
     </MainWrapper>

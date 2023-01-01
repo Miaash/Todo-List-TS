@@ -1,30 +1,40 @@
-import styled from "styled-components";
-import { useLoginStore } from "../../store/store";
-import { useNavigate } from "react-router";
-import { auth } from "../../firebase/firebaseConfig";
-import { signOut } from "firebase/auth";
-import TodoLogo from "../../assets/TodoLogo.svg";
+import { useEffect } from 'react';
+import styled from 'styled-components';
+import { useLoginStore } from '../../store/store';
+import firebase from 'firebase/compat/app';
+import { useNavigate } from 'react-router';
+import { auth } from '../../firebase/firebaseConfig';
+import { signOut } from 'firebase/auth';
+import TodoLogo from '../../assets/TodoLogo.svg';
 
 const Header = () => {
   const navigate = useNavigate();
   const { isLogin, setIsLogin } = useLoginStore();
 
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setIsLogin(true);
+      }
+    });
+  }, []);
+
   // 로그아웃 핸들러
   const logoutHandler = () => {
     signOut(auth);
     setIsLogin(false);
-    alert("로그아웃 되었습니다.");
-    window.location.replace("/");
+    alert('로그아웃 되었습니다.');
+    window.location.replace('/');
   };
   return (
     <MainWrapper>
       <HeaderContainer>
-        <HeaderTitle src={TodoLogo} onClick={() => navigate("/")} />
+        <HeaderTitle src={TodoLogo} onClick={() => navigate('/')} />
         <LoginSection>
           {isLogin === true ? (
             <button onClick={logoutHandler}>Logout</button>
           ) : (
-            <button onClick={() => navigate("/login")}>Login</button>
+            <button onClick={() => navigate('/login')}>Login</button>
           )}
         </LoginSection>
       </HeaderContainer>

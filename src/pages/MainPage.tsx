@@ -1,11 +1,22 @@
-import styled from "styled-components";
-import { useNavigate } from "react-router";
-import Header from "../components/common/Header";
-import { useLoginStore } from "../store/store";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router';
+import Header from '../components/common/Header';
+import { useLoginStore } from '../store/store';
+import { useEffect } from 'react';
+import firebase from 'firebase/compat/app';
 
 const MainPage = () => {
-  const { isLogin } = useLoginStore();
+  const { isLogin, setIsLogin } = useLoginStore();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        setIsLogin(true);
+      }
+    });
+  }, []);
+
   return (
     <MainWrapper>
       <Header />
@@ -19,11 +30,11 @@ const MainPage = () => {
         </TextBox>
         <ButtonBox>
           {isLogin === true ? (
-            <button onClick={() => navigate("/usertodo")}>
+            <button onClick={() => navigate('/usertodo')}>
               Go to My Todo-List
             </button>
           ) : (
-            <button onClick={() => navigate("/login")}>Create a Todo!</button>
+            <button onClick={() => navigate('/login')}>Create a Todo!</button>
           )}
         </ButtonBox>
       </MainContents>
