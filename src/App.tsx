@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import TodoListPage from './pages/TodoListPage';
 import { auth } from './firebase/firebaseConfig';
+import NotFoundPage from './pages/NotFoundPage';
 
 // export interface AuthType {
 //   isLogin: boolean;
@@ -36,6 +37,7 @@ const App: React.FC = () => {
           />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/usertodo" element={<TodoListPage />} />
+          <Route path="/*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>
     </>
