@@ -1,21 +1,9 @@
 import styled from 'styled-components';
-import { useNavigate } from 'react-router';
+import React, { useNavigate } from 'react-router';
 import Header from '../components/common/Header';
-import { useLoginStore } from '../store/store';
-import { useEffect } from 'react';
-import firebase from 'firebase/compat/app';
 
-const MainPage = () => {
-  const { isLogin, setIsLogin } = useLoginStore();
+const MainPage = ({ isLogin }: { isLogin: boolean }) => {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        setIsLogin(true);
-      }
-    });
-  }, []);
 
   return (
     <MainWrapper>

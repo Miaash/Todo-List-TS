@@ -4,13 +4,17 @@ import { auth } from '../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import { useNavigate } from 'react-router';
-import { useLoginStore } from '../store/store';
+// import { useLoginStore } from '../store/store';
 import Header from '../components/common/Header';
 
-const LoginPage = () => {
+const LoginPage = ({
+  setIsLogin,
+}: {
+  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [email, setEmail] = useState('');
   const [pwd, setPwd] = useState('');
-  const { setIsLogin } = useLoginStore();
+  // const { setIsLogin } = useLoginStore();
   const [emailError, setEmailError] = useState(false);
   const [pwdError, setPwdError] = useState(false);
 
@@ -49,20 +53,21 @@ const LoginPage = () => {
   // 로그인 핸들러
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // 세션에 (uid) 저장하기
+    // 세션에 (uid) 저장하기 => 로그인 유지 시 필요
     auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then((res) => {
       signInWithEmailAndPassword(auth, email, pwd)
-        .then(() => {
+        .then((res) => {
           alert('로그인 되었습니다.');
           navigate('/usertodo');
           setIsLogin(true);
+          console.log(res);
         })
         .catch((err) => {
           if (err.code === 'auth/user-not-found') {
             alert('계정이 없습니다. 회원가입을 진행해주세요.');
             navigate('/signup');
           } else {
-            alert(err);
+            alert(err.message);
           }
         });
     });
@@ -103,17 +108,20 @@ const LoginPage = () => {
             )}
           </PwdBox>
           {pwdError && emailError ? (
-            <button>SignUp</button>
+            <button>Login</button>
           ) : (
             <button
               className="disabled"
               disabled={true}
               style={{ cursor: 'no-drop' }}
             >
-              SignUp
+              Login
             </button>
           )}
         </FormBox>
+        <ButtonBox>
+          <button className="google-btn">Login with Google</button>
+        </ButtonBox>
         <TextBox>
           <p>계정이 없으신가요?</p>
           <span onClick={() => navigate('/signup')}>가입하기</span>
@@ -214,6 +222,27 @@ const PwdBox = styled.div`
   .wrong {
     color: red;
     font-size: 16px;
+  }
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  .google-btn {
+    width: 370px;
+    margin-top: 10px;
+    height: 57px;
+    font-size: 20px;
+    background-color: #ffffff;
+    border: 1px solid #bcbcbc;
+    border-radius: 10px;
+    color: #bcbcbc;
+    :hover {
+      cursor: pointer;
+      background-color: #0393e0;
+      color: #ffffff;
+    }
   }
 `;
 
