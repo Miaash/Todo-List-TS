@@ -1,16 +1,15 @@
-import firebase from "firebase/compat/app";
-import "firebase/compat/firestore";
-import "firebase/compat/auth";
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
+import 'firebase/compat/auth';
 
 const firebaseConfig = {
-  // firebase 설정과 관련된 개인 정보
-  apiKey: "AIzaSyCh4fhSvFkTEkcItt0rnAyBiKlPwz3Jr_s",
-  authDomain: "todo-ts-3ea0b.firebaseapp.com",
-  projectId: "todo-ts-3ea0b",
-  storageBucket: "todo-ts-3ea0b.appspot.com",
-  messagingSenderId: "957364093498",
-  appId: "1:957364093498:web:a7b5709c16d1bd7d8bab03",
-  measurementId: "G-TBJL9XMB9Z",
+  apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECTID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_FIREBASE_APPID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENTID,
 };
 
 // firebaseConfig 정보로 firebase 시작
