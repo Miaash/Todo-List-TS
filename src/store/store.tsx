@@ -16,3 +16,14 @@ export const useLoginStore = create<isLoginType>((set) => ({
 export const useTokenStore = create((set) => ({
   token: sessionStorage.getItem('access_token'),
 }));
+
+export interface docIdType {
+  //타입스크립트 사용 시 필요 (js라면 지우기)
+  docId: string;
+  setDocId: (docId: string) => void;
+}
+
+export const useDocId = create<docIdType>((set) => ({
+  docId: '',
+  setDocId: (docId) => set({ docId }),
+}));

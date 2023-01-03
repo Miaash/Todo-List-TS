@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { apiKey } from '../../firebase/firebaseConfig';
 import { todos } from '../../firebase/firebaseController';
+import { useDocId } from '../../store/store';
 
 const TodoInput = () => {
   const [text, setText] = useState('');
   const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
   const isToken = sessionStorage.getItem(_session_key);
+  const { setDocId } = useDocId();
   const textChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setText(e.target.value);
@@ -19,7 +21,8 @@ const TodoInput = () => {
       createAt: new Date().toLocaleDateString(),
       id: isToken,
     };
-    await todos.add(createTodo);
+    const res = await todos.add(createTodo);
+    setDocId(res.id);
   };
   return (
     <div>
