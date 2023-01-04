@@ -73,6 +73,16 @@ const LoginPage = ({
     });
   };
 
+  // 소셜 로그인 핸들러
+  const onSocialClickHandler = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    const provider = new firebase.auth.GoogleAuthProvider();
+    const data = await auth.signInWithPopup(provider);
+    console.log(data);
+  };
+
   return (
     <MainWrapper>
       <Header />
@@ -120,7 +130,13 @@ const LoginPage = ({
           )}
         </FormBox>
         <ButtonBox>
-          <button className="google-btn">Login with Google</button>
+          <button
+            name="google"
+            className="google-btn"
+            onClick={onSocialClickHandler}
+          >
+            Login with Google
+          </button>
         </ButtonBox>
         <TextBox>
           <p>계정이 없으신가요?</p>
