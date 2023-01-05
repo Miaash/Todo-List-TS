@@ -45,7 +45,7 @@ const TodoView = ({ userUid }: { userUid: string }) => {
     // };
 
     // getUserTodo();
-  }, []);
+  }, [todoItems]);
 
   return (
     <div>

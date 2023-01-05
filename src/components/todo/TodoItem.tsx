@@ -43,7 +43,6 @@ const TodoItem = ({ todo }: IProps) => {
     await firestore.collection(`${userUid}`).doc(`${todo.id}`).update({
       text: newTodo,
     });
-    alert('수정되었습니다.');
     setEditMode(false);
   };
   const onEditHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
