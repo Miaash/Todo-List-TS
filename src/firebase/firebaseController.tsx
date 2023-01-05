@@ -1,7 +1,7 @@
 import { firestore } from './firebaseConfig';
 // import { apiKey } from './firebaseConfig';
 
-export const todos = firestore.collection('/todos');
+export const todos = firestore.collection('todos');
 
 //경로를 자세하게 적어야한다
 // const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;

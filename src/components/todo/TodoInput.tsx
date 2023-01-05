@@ -1,13 +1,12 @@
+import { orderBy } from 'firebase/firestore';
 import React, { useState } from 'react';
-import { apiKey } from '../../firebase/firebaseConfig';
-import { todos } from '../../firebase/firebaseController';
-import { useDocId } from '../../store/store';
+// import { todos } from '../../firebase/firebaseController';
+// import { useDocId } from '../../store/store';
+import { firestore } from '../../firebase/firebaseConfig';
 
-const TodoInput = () => {
+const TodoInput = ({ userUid }: { userUid: string }) => {
   const [text, setText] = useState('');
-  const _session_key = `firebase:authUser:${apiKey}:[DEFAULT]`;
-  const isToken = sessionStorage.getItem(_session_key);
-  const { setDocId } = useDocId();
+  // const { setDocId } = useDocId();
   const textChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setText(e.target.value);
@@ -19,10 +18,13 @@ const TodoInput = () => {
       text: text,
       isChecked: false,
       createAt: new Date().toLocaleDateString(),
-      id: isToken,
+      creatorId: userUid,
     };
-    const res = await todos.add(createTodo);
-    setDocId(res.id);
+    // promise를 리턴함
+    await firestore.collection(`${userUid}`).add(createTodo);
+    // 추가될 때 날짜 순으로 정렬 => 작동 안 함
+    orderBy('createAt', 'desc');
+    setText('');
   };
   return (
     <div>
@@ -30,8 +32,9 @@ const TodoInput = () => {
         <div>
           <input
             type="text"
-            placeholder="텍스트를 입력하세요"
+            placeholder="Enter your Todo."
             onChange={textChangeHandler}
+            value={text}
           />
         </div>
         <div>

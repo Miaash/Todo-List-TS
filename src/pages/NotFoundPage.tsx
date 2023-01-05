@@ -9,6 +9,8 @@ const NotFoundPage = () => {
   );
 };
 
+export default NotFoundPage;
+
 const NotFoundContainer = styled.div`
   margin: 50px;
 `;
@@ -22,4 +24,3 @@ const Text = styled.p`
   margin-top: 20px;
   font-size: 25px;
 `;
-export default NotFoundPage;

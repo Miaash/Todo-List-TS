@@ -15,12 +15,14 @@ import NotFoundPage from './pages/NotFoundPage';
 const App: React.FC = () => {
   // const [init, setInit] = useState(false);
   const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [userUid, setUserUid] = useState<string>(null);
   useEffect(() => {
     // 사용자 로그인 변화를 추적함
     // user가 존재하면(로그인 성공시) 로그인 상태 true, 실패 시 로그인 상태 false
     auth.onAuthStateChanged((user) => {
       if (user) {
         setIsLogin(true);
+        setUserUid(user.uid);
       } else {
         setIsLogin(false);
       }
@@ -36,7 +38,10 @@ const App: React.FC = () => {
             element={<LoginPage setIsLogin={setIsLogin} />}
           />
           <Route path="/signup" element={<SignUpPage />} />
-          <Route path="/usertodo" element={<TodoListPage />} />
+          <Route
+            path="/usertodo"
+            element={<TodoListPage userUid={userUid} />}
+          />
           <Route path="/*" element={<NotFoundPage />} />
         </Routes>
       </BrowserRouter>

@@ -4,6 +4,7 @@ export interface accountType {
 }
 
 export interface todoType {
+  creatorId?: string;
   id?: string;
   text?: string;
   isChecked?: boolean;
