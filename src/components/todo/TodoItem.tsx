@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { todoType } from '../../types/\btypes';
-// import { todos } from '../../firebase/firebaseController';
 import { firestore } from '../../firebase/firebaseConfig';
 import { auth } from '../../firebase/firebaseConfig';
+import styled from 'styled-components';
 
 interface IProps {
   todo: todoType;
@@ -11,6 +11,7 @@ interface IProps {
 const TodoItem = ({ todo }: IProps) => {
   const [editMode, setEditMode] = useState(false);
   const [newTodo, setNewTodo] = useState(todo.text);
+  const [newDate, setNewDate] = useState(todo.createAt);
   const [userUid, setUserUid] = useState<string>(null);
 
   useEffect(() => {
@@ -27,8 +28,12 @@ const TodoItem = ({ todo }: IProps) => {
     const confirmMsg = window.confirm('삭제하시겠습니까?');
     if (confirmMsg) {
       // todo.id를 doc경로로 지정해 삭제
-      await firestore.collection(`${userUid}`).doc(`${todo.id}`).delete();
-      alert('삭제되었습니다.');
+      try {
+        await firestore.collection(`${userUid}`).doc(`${todo.id}`).delete();
+        alert('삭제되었습니다.');
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
@@ -40,43 +45,185 @@ const TodoItem = ({ todo }: IProps) => {
   // todo 수정
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await firestore.collection(`${userUid}`).doc(`${todo.id}`).update({
+    const createNewTodo = {
       text: newTodo,
-    });
-    setEditMode(false);
+      isChecked: false,
+      createAt: newDate.replace(/\./g, '').replace(/\s/g, '-'),
+    };
+    try {
+      await firestore
+        .collection(`${userUid}`)
+        .doc(`${todo.id}`)
+        .update(createNewTodo);
+      setEditMode(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
-  const onEditHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onEditTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setNewTodo(e.target.value);
   };
 
+  const onEditDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    setNewDate(e.target.value);
+  };
+
   return (
-    <div>
+    <MainWrapper>
       {editMode ? (
-        <div>
-          <form onSubmit={onSubmit}>
-            <input
-              type="text"
-              value={newTodo}
-              required
-              placeholder="Edit your Todo."
-              onChange={onEditHandler}
-            />
-            <button>confirm</button>
-          </form>
-          <button onClick={onEditModeHandler}>취소</button>
-        </div>
+        <TodoItemBox>
+          <EditFormBox onSubmit={onSubmit}>
+            <InputBox>
+              <input
+                type="text"
+                value={newTodo}
+                required
+                placeholder="Edit your Todo."
+                onChange={onEditTextHandler}
+                className="text-input"
+              />
+              <input
+                type="date"
+                value={newDate}
+                onChange={onEditDateHandler}
+                className="date-input"
+              />
+            </InputBox>
+            <ControlBtnBox>
+              <button className="green">확인</button>
+              <button onClick={onEditModeHandler} className="red">
+                취소
+              </button>
+            </ControlBtnBox>
+          </EditFormBox>
+        </TodoItemBox>
       ) : (
-        <div>
-          <h3>{todo.text}</h3>
-          <div>
-            <button onClick={removeHandler}>삭제</button>
-            <button onClick={onEditModeHandler}>수정</button>
-          </div>
-        </div>
+        <TodoItemBox>
+          <TodoText>
+            <Text>{todo.text}</Text>
+            <Date>{todo.createAt}</Date>
+          </TodoText>
+          <ControlBtnBox>
+            <button className="green" onClick={onEditModeHandler}>
+              수정
+            </button>
+            <button className="red" onClick={removeHandler}>
+              삭제
+            </button>
+          </ControlBtnBox>
+        </TodoItemBox>
       )}
-    </div>
+    </MainWrapper>
   );
 };
 
 export default TodoItem;
+
+const MainWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+`;
+
+const TodoItemBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 60px;
+  margin: 5px 0;
+  border-radius: 10px;
+  border: 1px solid #b0b0b0;
+`;
+
+const TodoText = styled.div`
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  width: 100%;
+  height: 50px;
+  padding-left: 70px;
+`;
+
+const Text = styled.div`
+  display: flex;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+`;
+
+// 고쳐야할 부분
+const Date = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 20%;
+  align-items: flex-end;
+  font-size: 17px;
+`;
+
+const ControlBtnBox = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px;
+  button {
+    font-size: 15px;
+    width: 40px;
+    height: 20px;
+    border: none;
+    background-color: #fff;
+  }
+  button.red {
+    :hover {
+      cursor: pointer;
+      color: #f54100;
+    }
+  }
+  button.green {
+    :hover {
+      cursor: pointer;
+      color: #15b887;
+    }
+  }
+`;
+
+const EditFormBox = styled.form`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 60px;
+  margin: 5px 0;
+  border-radius: 10px;
+`;
+
+const InputBox = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 90%;
+  input.text-input {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    width: 70%;
+    padding: 0 30px 0 70px;
+    border: none;
+    outline: none;
+    color: #848484;
+  }
+  input.date-input {
+    font-size: 16px;
+    display: flex;
+    align-items: flex-end;
+    font-size: 18px;
+    width: 25%;
+    border: none;
+    outline: none;
+    color: #848484;
+  }
+`;

@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-// import { todos } from '../../firebase/firebaseController';
 import { firestore } from '../../firebase/firebaseConfig';
 import { DocumentData, onSnapshot, QuerySnapshot } from 'firebase/firestore';
 import { todoType } from '../../types/\btypes';
 import TodoItem from './TodoItem';
+import styled from 'styled-components';
 
 const TodoView = ({ userUid }: { userUid: string }) => {
   const date = new Date().toLocaleDateString();
@@ -12,10 +12,10 @@ const TodoView = ({ userUid }: { userUid: string }) => {
   useEffect(() => {
     // onSnapshot메서드는 데이터에 crud이벤트가 감지 되었을 때 실행함.
     // 데이터의 변화를 실시간으로 알려주는 리스너
-    // forEach방식보다 더 적게 리렌더링함.
+    // forEach방식보다 더 적게 리렌더링함,
     // 실시간으로 데이터가 변동된 사항을 보여줌
     onSnapshot(
-      firestore.collection(`${userUid}`),
+      firestore.collection(`${userUid}`).orderBy('createAt'),
       (snapshot: QuerySnapshot<DocumentData>) => {
         setTodoItems(
           snapshot.docs &&
@@ -28,40 +28,58 @@ const TodoView = ({ userUid }: { userUid: string }) => {
         );
       }
     );
-
-    // const getUserTodo = async () => {
-    //   const getTodo = await todos.where('creatorId', '==', userUid).get();
-
-    //   onSnapshot(todos, (snapshot: QuerySnapshot<DocumentData>) => {
-    //     setTodoItems(
-    //       getTodo.docs.map((doc) => {
-    //         return {
-    //           ...doc.data(),
-    //           id: doc.id,
-    //         };
-    //       })
-    //     );
-    //   });
-    // };
-
-    // getUserTodo();
-  }, [todoItems]);
+  }, [todoItems, userUid]);
 
   return (
-    <div>
-      <h2> Todo List </h2>
-      <h3>{date}</h3>
-      {todoItems && todoItems.length ? (
-        <div>
-          {todoItems?.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} />
-          ))}
-        </div>
-      ) : (
-        <h3>There is no Todo</h3>
-      )}
-    </div>
+    <MainWrapper>
+      <TitleBox> Todo List </TitleBox>
+      <DateBox>오늘은 {date} 입니다.</DateBox>
+      <TodoBox>
+        {todoItems && todoItems.length ? (
+          <>
+            {todoItems?.map((todo) => (
+              <TodoItem key={todo.id} todo={todo} />
+            ))}
+          </>
+        ) : (
+          <TextBox>Todo를 추가해보세요!</TextBox>
+        )}
+      </TodoBox>
+    </MainWrapper>
   );
 };
 
 export default TodoView;
+
+const MainWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100vw;
+`;
+
+const TitleBox = styled.p`
+  font-size: 30px;
+  margin-top: 50px;
+  font-weight: 600;
+`;
+
+const DateBox = styled.p`
+  margin-top: 5px;
+  font-size: 20px;
+  color: #15b887;
+`;
+
+const TodoBox = styled.div`
+  width: 100%;
+`;
+
+const TextBox = styled.p`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 20px;
+  color: gray;
+`;

@@ -191,6 +191,7 @@ const FormBox = styled.form`
     height: 40px;
     font-size: 20px;
     padding: 7px;
+    outline: none;
   }
   button {
     height: 57px;
@@ -218,7 +219,7 @@ const EmailBox = styled.div`
   justify-content: center;
   flex-direction: column;
   .correct {
-    color: green;
+    color: #15b887;
     font-size: 16px;
   }
   .wrong {
@@ -232,7 +233,7 @@ const PwdBox = styled.div`
   justify-content: center;
   flex-direction: column;
   .correct {
-    color: green;
+    color: #15b887;
     font-size: 16px;
   }
   .wrong {

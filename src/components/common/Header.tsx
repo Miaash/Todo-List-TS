@@ -57,14 +57,12 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 70px;
+  height: 50px;
   width: 100%;
-
-  background-color: var(--black-030);
 `;
 
 const HeaderTitle = styled.img`
-  width: 140px;
+  width: 110px;
   :hover {
     cursor: pointer;
   }
@@ -73,13 +71,14 @@ const HeaderTitle = styled.img`
 const LoginSection = styled.div`
   position: absolute;
   right: 0;
-  margin-right: 200px;
+  margin-right: 100px;
   button {
-    font-size: 20px;
+    font-size: 15px;
     background-color: #fff;
     border: none;
     :hover {
       cursor: pointer;
+      color: #15b887;
     }
   }
 `;
