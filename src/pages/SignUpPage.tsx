@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { auth } from '../firebase/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router';
 import Header from '../components/common/Header';
-import firebase from 'firebase/compat/app';
+import { useAuthStateChange } from '../hooks/hooks';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');
@@ -14,13 +14,7 @@ const SignUpPage = () => {
   const navigate = useNavigate();
 
   // 로그인된 상태로 회원가입페이지 접근 시, 메인페이지로 이동
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        navigate('/');
-      }
-    });
-  }, []);
+  useAuthStateChange();
 
   const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
