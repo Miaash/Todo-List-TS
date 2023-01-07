@@ -16,7 +16,6 @@ const TodoItem = ({ todo }: IProps) => {
   const [newTodo, setNewTodo] = useState(todo.text);
   const [newDate, setNewDate] = useState(todo.createAt);
   const [userUid, setUserUid] = useState<string>(null);
-  const [isChecked, setIsChecked] = useState(false);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -50,7 +49,6 @@ const TodoItem = ({ todo }: IProps) => {
     e.preventDefault();
     const createNewTodo = {
       text: newTodo,
-      isChecked: !isChecked,
       createAt: newDate.replace(/\./g, '').replace(/\s/g, '-'),
     };
     try {
@@ -76,9 +74,8 @@ const TodoItem = ({ todo }: IProps) => {
 
   const onIsChekcedChangeHandler = async (e: React.MouseEvent) => {
     e.preventDefault();
-    setIsChecked((prev) => !prev);
     const changedIsChecked = {
-      isChecked: isChecked,
+      isChecked: !todo.isChecked,
     };
     try {
       await firestore
@@ -122,13 +119,13 @@ const TodoItem = ({ todo }: IProps) => {
       ) : (
         <TodoItemBox>
           <TodoCheckBox onClick={onIsChekcedChangeHandler}>
-            {isChecked ? (
+            {todo.isChecked ? (
               <FontAwesomeIcon icon={faCircleCheck} className="icon" />
             ) : (
               <FontAwesomeIcon icon={faCircle} className="icon" />
             )}
             <TodoText>
-              <Text className={isChecked ? 'complete' : 'pending'}>
+              <Text className={todo.isChecked ? 'complete' : 'pending'}>
                 {todo.text}
               </Text>
               <Date>{todo.createAt}</Date>
