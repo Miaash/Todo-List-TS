@@ -3,6 +3,9 @@ import { todoType } from '../../types/\btypes';
 import { firestore } from '../../firebase/firebaseConfig';
 import { auth } from '../../firebase/firebaseConfig';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCircle } from '@fortawesome/free-regular-svg-icons';
 
 interface IProps {
   todo: todoType;
@@ -27,7 +30,6 @@ const TodoItem = ({ todo }: IProps) => {
     e.preventDefault();
     const confirmMsg = window.confirm('삭제하시겠습니까?');
     if (confirmMsg) {
-      // todo.id를 doc경로로 지정해 삭제
       try {
         await firestore.collection(`${userUid}`).doc(`${todo.id}`).delete();
         alert('삭제되었습니다.');
@@ -60,6 +62,7 @@ const TodoItem = ({ todo }: IProps) => {
       console.error(err);
     }
   };
+
   const onEditTextHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setNewTodo(e.target.value);
@@ -68,6 +71,21 @@ const TodoItem = ({ todo }: IProps) => {
   const onEditDateHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setNewDate(e.target.value);
+  };
+
+  const onIsChekcedChangeHandler = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    const changedIsChecked = {
+      isChecked: !todo.isChecked,
+    };
+    try {
+      await firestore
+        .collection(`${userUid}`)
+        .doc(`${todo.id}`)
+        .update(changedIsChecked);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
@@ -101,10 +119,19 @@ const TodoItem = ({ todo }: IProps) => {
         </TodoItemBox>
       ) : (
         <TodoItemBox>
-          <TodoText>
-            <Text>{todo.text}</Text>
-            <Date>{todo.createAt}</Date>
-          </TodoText>
+          <TodoCheckBox onClick={onIsChekcedChangeHandler}>
+            {todo.isChecked ? (
+              <FontAwesomeIcon icon={faCircleCheck} className="icon" />
+            ) : (
+              <FontAwesomeIcon icon={faCircle} className="icon" />
+            )}
+            <TodoText>
+              <Text className={todo.isChecked ? 'complete' : 'pending'}>
+                {todo.text}
+              </Text>
+              <Date>{todo.createAt}</Date>
+            </TodoText>
+          </TodoCheckBox>
           <ControlBtnBox>
             <button className="green" onClick={onEditModeHandler}>
               수정
@@ -140,13 +167,33 @@ const TodoItemBox = styled.div`
   border: 1px solid #b0b0b0;
 `;
 
+const TodoCheckBox = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  :hover {
+    cursor: pointer;
+  }
+  .icon {
+    font-size: 25px;
+    color: #15b887;
+    margin-left: 20px;
+  }
+`;
+
 const TodoText = styled.div`
   display: flex;
   align-items: center;
   font-size: 18px;
   width: 100%;
   height: 50px;
-  padding-left: 70px;
+  padding-left: 20px;
+  .complete {
+    color: #848484;
+    text-decoration: line-through;
+  }
+  .pending {
+  }
 `;
 
 const Text = styled.div`
