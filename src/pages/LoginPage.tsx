@@ -6,6 +6,8 @@ import firebase from 'firebase/compat/app';
 import { useNavigate } from 'react-router';
 import Header from '../components/common/Header';
 import { useAuthStateChange } from '../hooks/hooks';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
 const LoginPage = ({
   setIsLogin,
@@ -129,6 +131,7 @@ const LoginPage = ({
             className="google-btn"
             onClick={onSocialClickHandler}
           >
+            <FontAwesomeIcon icon={faGoogle} className="icon" />
             Login with Google
           </button>
         </ButtonBox>
@@ -248,11 +251,14 @@ const ButtonBox = styled.div`
     background-color: #ffffff;
     border: 1px solid #bcbcbc;
     border-radius: 10px;
-    color: #bcbcbc;
+    color: #959595;
     :hover {
       cursor: pointer;
-      background-color: #0393e0;
+      background-color: #13a478;
       color: #ffffff;
+    }
+    .icon {
+      margin-right: 10px;
     }
   }
 `;
