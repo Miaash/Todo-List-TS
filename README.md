@@ -4,7 +4,7 @@
 https://todo-ts-3ea0b.web.app/
 
 ### 블로그 링크
-https://eight-heath-b94.notion.site/Todo-List-0712d6c134864963878fe612b77f1111
+https://eight-heath-b94.notion.site/Todo-List-TS-2d7d815e98784e4e9c491719247056e2
 
 ### 사용 스택
 - TypeScript
