@@ -55,7 +55,6 @@ const LoginPage = ({
           alert('로그인 되었습니다.');
           navigate('/usertodo');
           setIsLogin(true);
-          console.log(res);
         })
         .catch((err) => {
           if (err.code === 'auth/user-not-found') {
