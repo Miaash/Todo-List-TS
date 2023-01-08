@@ -6,7 +6,7 @@ https://todo-ts-3ea0b--todo-ts-3ea0b-gj5k8d1c.web.app
 
 ### 블로그 링크
 ----
-https://eight-heath-b94.notion.site/Todo-List-0712d6c134864963878fe612b77f1111
+https://todo-ts-3ea0b.web.app/
 
 ### 사용 스택
 ----
