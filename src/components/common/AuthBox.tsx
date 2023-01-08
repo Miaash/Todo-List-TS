@@ -1,16 +1,15 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { auth } from "../../firebase/firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { useNavigate } from "react-router";
+import React, { useState } from 'react';
+import { auth } from '../../firebase/firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router';
 
 interface IProps {
   children: string;
 }
 
 const AuthBox = ({ children }: IProps) => {
-  const [email, setEmail] = useState<string>("");
-  const [pwd, setPwd] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [pwd, setPwd] = useState<string>('');
   const navigate = useNavigate();
 
   const changeEmailHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,8 +27,8 @@ const AuthBox = ({ children }: IProps) => {
 
     createUserWithEmailAndPassword(auth, email, pwd)
       .then(() => {
-        alert("회원가입 성공!");
-        navigate("/login");
+        alert('회원가입 성공!');
+        navigate('/login');
       })
       .catch((err) => {
         alert(err);
