@@ -15,7 +15,7 @@ const TodoItem = ({ todo }: IProps) => {
   const [editMode, setEditMode] = useState(false);
   const [newTodo, setNewTodo] = useState(todo.text);
   const [newDate, setNewDate] = useState(todo.createAt);
-  const [userUid, setUserUid] = useState<string>(null);
+  const [userUid, setUserUid] = useState<string | null>(null);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {

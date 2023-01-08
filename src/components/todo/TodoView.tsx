@@ -15,7 +15,7 @@ const TodoView = ({ userUid }: { userUid: string }) => {
     // forEach방식보다 더 적게 리렌더링함,
     // 실시간으로 데이터가 변동된 사항을 보여줌
     onSnapshot(
-      firestore.collection(`${userUid}`).orderBy('createAt'),
+      firestore.collection(`${userUid}`).orderBy('isChecked'),
       (snapshot: QuerySnapshot<DocumentData>) => {
         setTodoItems(
           snapshot.docs &&

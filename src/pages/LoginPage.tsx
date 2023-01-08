@@ -8,6 +8,7 @@ import Header from '../components/common/Header';
 import { useAuthStateChange } from '../hooks/hooks';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import Button from '../components/common/Button';
 
 const LoginPage = ({
   setIsLogin,
@@ -16,7 +17,6 @@ const LoginPage = ({
 }) => {
   const [email, setEmail] = useState('');
   const [pwd, setPwd] = useState('');
-  // const { setIsLogin } = useLoginStore();
   const [emailError, setEmailError] = useState(false);
   const [pwdError, setPwdError] = useState(false);
 
@@ -114,26 +114,25 @@ const LoginPage = ({
             )}
           </PwdBox>
           {pwdError && emailError ? (
-            <button>Login</button>
+            <Button title={'Login'} />
           ) : (
-            <button
-              className="disabled"
+            <Button
+              className={'disabled'}
               disabled={true}
               style={{ cursor: 'no-drop' }}
-            >
-              Login
-            </button>
+              title={'Login'}
+            />
           )}
         </FormBox>
         <ButtonBox>
-          <button
-            name="google"
-            className="google-btn"
+          <Button
+            name={'google'}
+            className={'google-btn'}
             onClick={onSocialClickHandler}
+            title={'Login with Google'}
           >
             <FontAwesomeIcon icon={faGoogle} className="icon" />
-            Login with Google
-          </button>
+          </Button>
         </ButtonBox>
         <TextBox>
           <p>계정이 없으신가요?</p>

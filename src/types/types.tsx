@@ -1,6 +1,6 @@
 export interface accountType {
-  email?: string;
-  pwd?: string;
+  email: string;
+  pwd: string;
 }
 
 export interface todoType {
