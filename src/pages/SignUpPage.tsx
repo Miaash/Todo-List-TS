@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { useNavigate } from 'react-router';
 import { auth } from '../firebase/firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { useNavigate } from 'react-router';
-import Header from '../components/common/Header';
 import { useAuthStateChange } from '../hooks/hooks';
+import Header from '../components/common/Header';
+import styled from 'styled-components';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');

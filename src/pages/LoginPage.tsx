@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
+import { useNavigate } from 'react-router';
+import firebase from 'firebase/compat/app';
 import { auth } from '../firebase/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import firebase from 'firebase/compat/app';
-import { useNavigate } from 'react-router';
-import Header from '../components/common/Header';
 import { useAuthStateChange } from '../hooks/hooks';
+import Header from '../components/common/Header';
+import Button from '../components/common/Button';
+import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import Button from '../components/common/Button';
 
 const LoginPage = ({
   setIsLogin,
@@ -19,7 +19,6 @@ const LoginPage = ({
   const [pwd, setPwd] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [pwdError, setPwdError] = useState(false);
-
   const navigate = useNavigate();
 
   // 로그인된 상태로 로그인페이지 접근 시, 메인페이지로 이동
