@@ -1,15 +1,12 @@
 # Todo-List-TS
 
 ### 배포 링크
-----
-https://todo-ts-3ea0b--todo-ts-3ea0b-gj5k8d1c.web.app
+https://todo-ts-3ea0b.web.app/
 
 ### 블로그 링크
-----
-https://eight-heath-b94.notion.site/Todo-List-0712d6c134864963878fe612b77f1111
+https://eight-heath-b94.notion.site/Todo-List-TS-2d7d815e98784e4e9c491719247056e2
 
 ### 사용 스택
-----
 - TypeScript
 - React.js
 - Styled-Components
@@ -17,7 +14,6 @@ https://eight-heath-b94.notion.site/Todo-List-0712d6c134864963878fe612b77f1111
 - Zustand
 
 ### 주요기능 및 구현화면
-----
 #### 로그인 및 회원가입 
 - 로그인 (일반)
 ![일반로그인](https://user-images.githubusercontent.com/98681659/211206712-b6d1c7f3-dd7e-4a7e-ab9a-45d33272567b.gif)
