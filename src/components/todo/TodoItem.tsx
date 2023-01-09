@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleCheck } from '@fortawesome/free-solid-svg-icons';
 import { faCircle } from '@fortawesome/free-regular-svg-icons';
-
+import Swal from 'sweetalert2';
 interface IProps {
   todo: todoType;
 }
@@ -26,17 +26,35 @@ const TodoItem = ({ todo }: IProps) => {
   }, []);
 
   // todo 삭제
-  const removeHandler = async (e: React.MouseEvent<HTMLElement>) => {
+  const removeHandler = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    const confirmMsg = window.confirm('삭제하시겠습니까?');
-    if (confirmMsg) {
-      try {
-        await firestore.collection(`${userUid}`).doc(`${todo.id}`).delete();
-        alert('삭제되었습니다.');
-      } catch (err) {
-        console.error(err);
+    Swal.fire({
+      title: '삭제하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f97753',
+      cancelButtonColor: '#909090',
+      cancelButtonText: '취소',
+      confirmButtonText: '삭제',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await firestore.collection(`${userUid}`).doc(`${todo.id}`).delete();
+          Swal.fire({
+            icon: 'success',
+            title: '삭제되었습니다.',
+            confirmButtonColor: '#15b887',
+          });
+        } catch (err) {
+          Swal.fire({
+            icon: 'error',
+            title: '로그인에 실패했습니다.',
+            text: 'err.message',
+            confirmButtonColor: '#15b887',
+          });
+        }
       }
-    }
+    });
   };
 
   // 수정 모드 전환
@@ -58,7 +76,12 @@ const TodoItem = ({ todo }: IProps) => {
         .update(createNewTodo);
       setEditMode(false);
     } catch (err) {
-      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: '수정에 실패했습니다.',
+        text: 'err.message',
+        confirmButtonColor: '#15b887',
+      });
     }
   };
 
@@ -83,7 +106,12 @@ const TodoItem = ({ todo }: IProps) => {
         .doc(`${todo.id}`)
         .update(changedIsChecked);
     } catch (err) {
-      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: '체크 오류',
+        text: 'err.message',
+        confirmButtonColor: '#15b887',
+      });
     }
   };
 

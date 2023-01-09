@@ -5,6 +5,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useAuthStateChange } from '../hooks/hooks';
 import Header from '../components/common/Header';
 import styled from 'styled-components';
+import Swal from 'sweetalert2';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState('');
@@ -30,11 +31,12 @@ const SignUpPage = () => {
   };
   const changePwdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setPwd(e.target.value);
+    const password = e.target.value.trim();
+    setPwd(password);
     // 패스워드 유효성 검사
-    if (e.target.value.length < 6) {
+    if (password.length < 6) {
       setPwdError(false);
-    } else if (e.target.value.length >= 6) {
+    } else if (password.length >= 6) {
       setPwdError(true);
     }
   };
@@ -45,15 +47,30 @@ const SignUpPage = () => {
 
     createUserWithEmailAndPassword(auth, email, pwd)
       .then(() => {
-        alert('회원가입 되었습니다.');
+        Swal.fire({
+          icon: 'success',
+          title: '회원가입 성공!',
+          text: '환영합니다. 여러분의 Todo를 기록하세요.',
+          confirmButtonColor: '#15b887',
+        });
         navigate('/login');
       })
       .catch((err) => {
         if (err.code === 'auth/email-already-in-use') {
-          alert('이미 가입된 계정입니다. 로그인을 진행해주세요.');
+          Swal.fire({
+            icon: 'error',
+            title: '회원가입에 실패했습니다.',
+            text: '이미 가입된 계정입니다. 로그인을 해주세요.',
+            confirmButtonColor: '#15b887',
+          });
           navigate('/login');
         } else {
-          alert(err);
+          Swal.fire({
+            icon: 'error',
+            title: '회원가입에 실패했습니다.',
+            text: '다시 시도해주세요',
+            confirmButtonColor: '#15b887',
+          });
         }
       });
   };

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 import { auth } from '../../firebase/firebaseConfig';
 import { signOut } from 'firebase/auth';
 import TodoLogo from '../../assets/TodoLogo.svg';
+import Swal from 'sweetalert2';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -21,10 +22,35 @@ const Header = () => {
 
   // 로그아웃 핸들러
   const logoutHandler = () => {
-    signOut(auth);
-    setIsLogin(false);
-    alert('로그아웃 되었습니다.');
-    window.location.replace('/');
+    Swal.fire({
+      title: '로그아웃 하시겠습니까?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f97753',
+      cancelButtonColor: '#909090',
+      cancelButtonText: '취소',
+      confirmButtonText: '로그아웃',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          Swal.fire({
+            icon: 'success',
+            title: '로그아웃 되었습니다.',
+            confirmButtonColor: '#15b887',
+          });
+          await signOut(auth);
+          setIsLogin(false);
+          window.location.replace('/');
+        } catch (err) {
+          Swal.fire({
+            icon: 'error',
+            title: '로그인에 실패했습니다.',
+            text: 'err.message',
+            confirmButtonColor: '#15b887',
+          });
+        }
+      }
+    });
   };
   return (
     <MainWrapper>

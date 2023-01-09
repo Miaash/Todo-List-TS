@@ -9,6 +9,7 @@ import Button from '../components/common/Button';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import Swal from 'sweetalert2';
 
 const LoginPage = ({
   setIsLogin,
@@ -37,10 +38,11 @@ const LoginPage = ({
   };
   const changePwdHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    setPwd(e.target.value);
-    if (e.target.value.length < 6) {
+    const password = e.target.value.trim();
+    setPwd(password);
+    if (password.length < 6) {
       setPwdError(false);
-    } else if (e.target.value.length >= 6) {
+    } else if (password.length >= 6) {
       setPwdError(true);
     }
   };
@@ -52,16 +54,31 @@ const LoginPage = ({
     auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).then((res) => {
       signInWithEmailAndPassword(auth, email, pwd)
         .then((res) => {
-          alert('로그인 되었습니다.');
+          Swal.fire({
+            icon: 'success',
+            title: '로그인 성공!',
+            text: '환영합니다. 여러분의 Todo를 기록하세요.',
+            confirmButtonColor: '#15b887',
+          });
           navigate('/usertodo');
           setIsLogin(true);
         })
         .catch((err) => {
           if (err.code === 'auth/user-not-found') {
-            alert('계정이 없습니다. 회원가입을 진행해주세요.');
+            Swal.fire({
+              icon: 'error',
+              title: '로그인에 실패했습니다.',
+              text: '계정이 없습니다. 회원가입을 진행해주세요.',
+              confirmButtonColor: '#15b887',
+            });
             navigate('/signup');
-          } else {
-            alert(err.message);
+          } else if (err.code === 'auth/wrong-password') {
+            Swal.fire({
+              icon: 'error',
+              title: '로그인에 실패했습니다.',
+              text: '비밀번호가 일치하지 않습니다.',
+              confirmButtonColor: '#15b887',
+            });
           }
         });
     });
