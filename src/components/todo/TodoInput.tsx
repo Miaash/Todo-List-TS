@@ -14,10 +14,7 @@ const TodoInput = ({ userUid }: { userUid: string }) => {
     const createTodo = {
       text: text,
       isChecked: false,
-      createAt: new Date()
-        .toLocaleDateString()
-        .replace(/\./g, '')
-        .replace(/\s/g, '-'),
+      createAt: new Date().toISOString().substring(0, 10),
       creatorId: userUid,
     };
     try {

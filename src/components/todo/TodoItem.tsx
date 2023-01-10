@@ -12,6 +12,7 @@ interface IProps {
 }
 
 const TodoItem = ({ todo }: IProps) => {
+  const today = new Date().toISOString().substring(0, 10);
   const [editMode, setEditMode] = useState(false);
   const [newTodo, setNewTodo] = useState(todo.text);
   const [newDate, setNewDate] = useState(todo.createAt);
@@ -130,10 +131,13 @@ const TodoItem = ({ todo }: IProps) => {
                 className="text-input"
               />
               <input
-                type="date"
-                value={newDate}
+                id="date"
                 onChange={onEditDateHandler}
                 className="date-input"
+                value={newDate}
+                type="date"
+                min={today}
+                placeholder="만기일"
               />
             </InputBox>
             <ControlBtnBox>
@@ -153,10 +157,10 @@ const TodoItem = ({ todo }: IProps) => {
               <FontAwesomeIcon icon={faCircle} className="icon" />
             )}
             <TodoText>
-              <Text className={todo.isChecked ? 'complete' : 'pending'}>
+              <TextBox className={todo.isChecked ? 'complete' : 'pending'}>
                 {todo.text}
-              </Text>
-              <Date>{todo.createAt}</Date>
+              </TextBox>
+              <DateBox>{todo.createAt}</DateBox>
             </TodoText>
           </TodoCheckBox>
           <ControlBtnBox>
@@ -223,15 +227,14 @@ const TodoText = styled.div`
   }
 `;
 
-const Text = styled.div`
+const TextBox = styled.div`
   display: flex;
   align-items: center;
   text-align: center;
   width: 100%;
 `;
 
-// 고쳐야할 부분
-const Date = styled.div`
+const DateBox = styled.div`
   display: flex;
   align-items: flex-end;
   justify-content: center;
