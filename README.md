@@ -1,5 +1,5 @@
-# Todo-List-TS ✔︎
-## 여러분의 Todo를 기록하세요.
+# Todo-List-TS 
+## ✏️ 여러분의 Todo를 기록하세요.
 
 ### 배포 링크
 https://todo-ts-3ea0b.web.app/
