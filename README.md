@@ -2,10 +2,10 @@
 ## ✏️ 여러분의 Todo를 기록하세요.
 
 ### 📎 배포 링크 
-👉 https://todo-ts-3ea0b.web.app/
+ https://todo-ts-3ea0b.web.app/
 
 ### 📎 블로그 링크 
-👉 https://www.notion.so/Todo-List-afe28ef6881a4129b07ead7ca34fc66e
+ https://www.notion.so/Todo-List-afe28ef6881a4129b07ead7ca34fc66e
 
 ### ⚙️ 사용 스택
 - TypeScript
