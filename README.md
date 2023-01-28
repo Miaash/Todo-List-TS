@@ -19,7 +19,7 @@
 - 로그인, 회원가입 기능을 구현하고 유저의 Todo 데이터를 관리하기 위해 firebase를 사용했습니다.
 
 ### ⚙️ 파일구조
-
+```
 client
     ├── package.json
     ├── package-lock.json
@@ -36,6 +36,7 @@ client
     │   ├── types
     │   └── utils
     └── tsconfig.json
+ ```
 
 ### 🛠️ 문제점과 해결책
 - 문제점 : 로그인, 회원가입 페이지 내의 중복코드가 존재하여 가독성이 떨어진다.
