@@ -1,5 +1,5 @@
 # Todo-List-TS 
-## ✏️ 여러분의 Todo를 기록하세요.
+##  ✏️나만의 Todo를 기록하세요.
 
 ### 📎 배포 링크 
  https://todo-ts-3ea0b.web.app/
@@ -18,6 +18,24 @@
 - 학습한 타입스크립트를 실제로 적용하며 실력을 향상시키기 위해 제작했습니다.
 - 로그인, 회원가입 기능을 구현하고 유저의 Todo 데이터를 관리하기 위해 firebase를 사용했습니다.
 
+### ⚙️ 파일구조
+
+client
+    ├── package.json
+    ├── package-lock.json
+    ├── public
+    ├── src
+    │   ├── assets
+    │   │   ├── css
+    │   │   └── images
+    │   ├── components
+    │   ├── hooks
+    │   ├── mocks
+    │   ├── pages
+    │   ├── redux
+    │   ├── types
+    │   └── utils
+    └── tsconfig.json
 
 ### 🛠️ 문제점과 해결책
 - 문제점 : 로그인, 회원가입 페이지 내의 중복코드가 존재하여 가독성이 떨어진다.
